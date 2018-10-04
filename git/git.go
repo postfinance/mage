@@ -48,6 +48,10 @@ type Tag struct {
 	Count int
 }
 
+// String renders the template. The default template creates the same output as
+//     git describe --always --long --tags --dirty.
+//
+// This behaviour can be changed by using a different template.
 func (i Info) String() string {
 	return i.s
 }
@@ -127,9 +131,24 @@ func New(path string, opts ...func(*Info)) (*Info, error) {
 // WithPackageTemplate is a template that can be used for packages.
 // It creates the following:
 //     <tagname>-<count>
+//
+// If there is no tag name, the following string is created:
+//     <count>
 func WithPackageTemplate() func(*Info) {
 	return func(i *Info) {
 		i.tmpl = pkgTemplate
+	}
+}
+
+// WithSemverTemplate creates a semver string.
+// It creates the following:
+//     <tagname>.<count>
+//
+// If there is no tag name, the following string is created:
+//     0.0.<count>
+func WithSemverTemplate() func(*Info) {
+	return func(i *Info) {
+		i.tmpl = semVerTemplate
 	}
 }
 
