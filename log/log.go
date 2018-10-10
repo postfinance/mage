@@ -28,12 +28,12 @@ func New() (*zap.Logger, error) {
 	config.Level = atom
 	config.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
 	atom.SetLevel(zap.ErrorLevel)
+	if mg.Verbose() {
+		atom.SetLevel(zap.InfoLevel)
+	}
 	if mg.Debug() {
 		atom.SetLevel(zap.DebugLevel)
 		config.DisableCaller = false
-	}
-	if mg.Verbose() {
-		atom.SetLevel(zap.InfoLevel)
 	}
 	var err error
 	l, err = config.Build()
