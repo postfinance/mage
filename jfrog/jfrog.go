@@ -21,7 +21,7 @@ func New(rtDetails auth.ArtifactoryDetails) (*Uploader, error) {
 	if err != nil {
 		return nil, err
 	}
-	rtManager, err := artifactory.New(serviceConfig)
+	rtManager, err := artifactory.New(&rtDetails, serviceConfig)
 	if err != nil {
 		return nil, err
 	}
