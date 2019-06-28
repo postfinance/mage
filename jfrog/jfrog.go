@@ -5,6 +5,7 @@ import (
 	"github.com/jfrog/jfrog-client-go/artifactory/auth"
 	"github.com/jfrog/jfrog-client-go/artifactory/services"
 	"github.com/jfrog/jfrog-client-go/artifactory/services/utils"
+	"github.com/jfrog/jfrog-client-go/utils/log"
 )
 
 // Uploader is responsible for uploading artifacts to an artifactory repository.
@@ -14,6 +15,7 @@ type Uploader struct {
 
 // New creates an Uploader.
 func New(rtDetails auth.ArtifactoryDetails) (*Uploader, error) {
+	log.SetLogger(log.NewLogger(log.INFO, nil))
 	serviceConfig, err := artifactory.NewConfigBuilder().
 		SetArtDetails(rtDetails).
 		SetDryRun(false).
