@@ -4,6 +4,7 @@ import (
 	"archive/tar"
 	"bytes"
 	"compress/gzip"
+	"fmt"
 	"html/template"
 	"io"
 	"io/ioutil"
@@ -13,6 +14,8 @@ import (
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/require"
 )
 
 const testData = "./testdata"
@@ -32,6 +35,7 @@ func TestNotag(t *testing.T) {
 			Hash:      "6ea1790235210db239ddb8b6d0191db571f5bd64",
 			ShortHash: "6ea17902",
 			Timestamp: time.Time{},
+			Name:      "refs/heads/master",
 			Author: author{
 				Name:  "Rene Zbinden",
 				Email: "rene.zbinden@postfinance.ch",
@@ -307,5 +311,10 @@ func TestTemplates(t *testing.T) {
 			}
 		})
 	}
+}
 
+func TestRene(t *testing.T) {
+	i, err := New("/tmp/tag")
+	require.NoError(t, err)
+	fmt.Println(i.Commit.Name)
 }

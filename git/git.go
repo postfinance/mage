@@ -30,6 +30,7 @@ type Info struct {
 // Commit contains all revision information.
 type Commit struct {
 	Hash      string
+	Name      string
 	ShortHash string
 	Timestamp time.Time
 	Author    author
@@ -110,6 +111,7 @@ func New(path string, opts ...func(*Info)) (*Info, error) {
 	}
 	i.Dirty = d
 	i.Commit.Hash = ref.Hash().String()
+	i.Commit.Name = string(ref.Name())
 	i.Commit.ShortHash = i.Commit.Hash[:8]
 	i.Commit.Author.Name = auth.Name
 	i.Commit.Author.Email = auth.Email
