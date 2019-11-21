@@ -2,11 +2,9 @@ package git
 
 import (
 	"bytes"
-	"errors"
 	"html/template"
 	"time"
 
-	"gopkg.in/src-d/go-git.v4"
 	gogit "gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/plumbing"
 	"gopkg.in/src-d/go-git.v4/plumbing/object"
@@ -113,17 +111,13 @@ func New(path string, opts ...func(*Info)) (*Info, error) {
 	}
 	i.Dirty = d
 	i.Commit.Hash = ref.Hash().String()
+	i.Commit.Name = string(ref.Name())
 	i.Commit.ShortHash = i.Commit.Hash[:8]
 	i.Commit.Author.Name = auth.Name
 	i.Commit.Author.Email = auth.Email
 	i.Commit.Timestamp = auth.When
 	i.Tag.Name = tag
 	i.Tag.Count = count
-	i.Commit.Name, err = currentBranch(r)
-	if err != nil {
-		return nil, err
-	}
-
 	t, err := template.New("string").Parse(i.tmpl)
 	if err != nil {
 		return nil, err
@@ -225,35 +219,4 @@ func dirty(r *gogit.Repository) (bool, error) {
 		}
 	}
 	return false, nil
-}
-
-func currentBranch(repository *git.Repository) (string, error) {
-	branchRefs, err := repository.Branches()
-	if err != nil {
-		return "", err
-	}
-
-	headRef, err := repository.Head()
-	if err != nil {
-		return "", err
-	}
-
-	var currentBranchName string
-	err = branchRefs.ForEach(func(branchRef *plumbing.Reference) error {
-		if branchRef.Hash() == headRef.Hash() {
-			currentBranchName = branchRef.Name().String()
-
-			return nil
-		}
-
-		return nil
-	})
-	if err != nil {
-		return "", err
-	}
-	if currentBranchName == "" {
-		return "", errors.New("could not detect branch for HEAD")
-	}
-
-	return currentBranchName, nil
 }
