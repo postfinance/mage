@@ -2,9 +2,10 @@ package jfrog
 
 import (
 	"github.com/jfrog/jfrog-client-go/artifactory"
-	"github.com/jfrog/jfrog-client-go/artifactory/auth"
 	"github.com/jfrog/jfrog-client-go/artifactory/services"
 	"github.com/jfrog/jfrog-client-go/artifactory/services/utils"
+	"github.com/jfrog/jfrog-client-go/auth"
+	"github.com/jfrog/jfrog-client-go/config"
 	"github.com/jfrog/jfrog-client-go/utils/log"
 )
 
@@ -14,10 +15,10 @@ type Uploader struct {
 }
 
 // New creates an Uploader.
-func New(rtDetails auth.ArtifactoryDetails) (*Uploader, error) {
+func New(rtDetails auth.ServiceDetails) (*Uploader, error) {
 	log.SetLogger(log.NewLogger(log.INFO, nil))
-	serviceConfig, err := artifactory.NewConfigBuilder().
-		SetArtDetails(rtDetails).
+	serviceConfig, err := config.NewConfigBuilder().
+		SetServiceDetails(rtDetails).
 		SetDryRun(false).
 		Build()
 	if err != nil {
