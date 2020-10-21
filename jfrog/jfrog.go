@@ -18,7 +18,7 @@ var (
 
 // Uploader is responsible for uploading artifacts to an artifactory repository.
 type Uploader struct {
-	rtManager *artifactory.ArtifactoryServicesManager
+	rtManager artifactory.ArtifactoryServicesManager
 }
 
 // New creates an Uploader.
